@@ -1,0 +1,107 @@
+{% extends "index.html" %}
+
+{% block titulo %}Acceso | Mi Sitio{% endblock %}
+
+{% block contenido %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show glass-alert" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="mb-4">
+            <i class="bi bi-person-circle display-1" style="color: rgba(255,255,255,0.8);"></i>
+            <h2 class="mt-3 fw-bold">Bienvenido</h2>
+        </div>
+
+        <ul class="nav nav-pills nav-fill mb-4 p-1 rounded-pill" id="pills-tab" role="tablist" style="background: rgba(0,0,0,0.2);">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill text-white fw-bold {% if active_tab == 'login' %}active{% endif %}" 
+                        id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login" type="button" role="tab">
+                    Iniciar Sesión
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill text-white fw-bold {% if active_tab == 'register' %}active{% endif %}" 
+                        id="pills-register-tab" data-bs-toggle="pill" data-bs-target="#pills-register" type="button" role="tab">
+                    Crear Cuenta
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            
+            <div class="tab-pane fade {% if active_tab == 'login' %}show active{% endif %}" id="pills-login" role="tabpanel">
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="login">
+
+                    <div class="form-floating mb-3">
+                        {{ login_form.username }}
+                        <label for="{{ login_form.username.id_for_label }}" class="text-white-50">Nombre de Usuario</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ login_form.password }}
+                        <label for="{{ login_form.password.id_for_label }}" class="text-white-50">Contraseña</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-custom w-100 py-2 fs-5">Entrar <i class="bi bi-box-arrow-in-right ms-2"></i></button>
+                </form>
+            </div>
+
+            <div class="tab-pane fade {% if active_tab == 'register' %}show active{% endif %}" id="pills-register" role="tabpanel">
+                <form method="POST" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="register">
+
+                    {% for field in register_form %}
+                        <div class="form-floating mb-3">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}" class="text-white-50">{{ field.label }}</label>
+                            {% if field.errors %}
+                                <div class="text-danger small text-start mt-1">
+                                    {{ field.errors.0 }}
+                                </div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <div class="text-white-50 small text-start" style="font-size: 0.75rem;">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-custom w-100 py-2 fs-5">Registrarse <i class="bi bi-rocket-takeoff ms-2"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos extra para los inputs de Django */
+    .glass-input {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        backdrop-filter: blur(5px);
+    }
+    .glass-input:focus {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 0 10px rgba(255,255,255,0.2) !important;
+        color: white !important;
+    }
+    /* Estilo para las alertas */
+    .glass-alert {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
