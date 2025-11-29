@@ -54,9 +54,10 @@ python -m venv venv
 venv\Scripts\activate
 # En Mac/Linux:
 source venv/bin/activate
+
 3. Instalar dependencias
 ```Bash
-pip install django
+pip install -r requirements.txt
 ```
 4. Migraciones de Base de Datos
 Necesario para que funcione el sistema de usuarios de Django.
